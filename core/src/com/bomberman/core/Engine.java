@@ -15,6 +15,7 @@ public class Engine extends ApplicationAdapter {
 	private Texture wall;
 	private Texture background;
 	private Texture brickwall;
+	private Texture player;
 	
 	private Integer[][] brickPositions;
 	
@@ -24,6 +25,7 @@ public class Engine extends ApplicationAdapter {
 		wall = new Texture("images/wall.png");
 		background = new Texture("images/background.jpg");
 		brickwall = new Texture("images/brickwall.jpg");
+		//player = new Texture("images/character_walk_sheets/character_walk_down_sheets/bomberSheetWalkDown00.png");
 		
 		brickPositions = new Integer[13][29];
 		for (int i = 0; i < 13; i++) {
@@ -116,6 +118,8 @@ public class Engine extends ApplicationAdapter {
 				batch.draw(wall, j , i);
 			}
 		}
+		
+		//batch.draw(player, 100 , 515);
 		
 		//BRICK WALL RENDERING
 		for (int i = 0; i < 13; i++) {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.joints.FrictionJoint;
 
@@ -16,6 +17,7 @@ public class Engine extends ApplicationAdapter {
 	private Texture background;
 	private Texture brickwall;
 	private Texture player;
+	private Sprite sprite;
 	
 	private Integer[][] brickPositions;
 	
@@ -25,7 +27,9 @@ public class Engine extends ApplicationAdapter {
 		wall = new Texture("images/wall.png");
 		background = new Texture("images/background.jpg");
 		brickwall = new Texture("images/brickwall.jpg");
-		//player = new Texture("images/character_walk_sheets/character_walk_down_sheets/bomberSheetWalkDown00.png");
+		player = new Texture(Gdx.files.internal("images/playerImage.png"));
+		sprite = new Sprite(player);
+		sprite.setPosition(88, 510);
 		
 		brickPositions = new Integer[13][29];
 		for (int i = 0; i < 13; i++) {
@@ -94,10 +98,29 @@ public class Engine extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		keyCheck();
+		
+		this.handleUserInput();
+		
 		batch.begin();
 		batch.draw(background, 0, 0);
 		renderMap();
+		sprite.draw(batch);
 		batch.end();
+	}
+
+	private void handleUserInput() {
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+			sprite.translateX(-2f);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+				sprite.translateX(2f);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+			sprite.translateY(-2f);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+			sprite.translateY(2f);
+		}
 	}
 	
 	public void renderMap(){

@@ -20,10 +20,13 @@ public class Engine extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		wall = new Texture("images/wall.png");
-		background = new Texture("images/background.jpg");
-		brickwall = new Texture("images/brickwall.jpg");
-		
+		// wall = new Texture("images/wall.png");
+		wall = new Texture("desktop/images/wall.png");
+		// background = new Texture("images/background.jpg");
+		background = new Texture("desktop/images/background.jpg");
+		// brickwall = new Texture("images/brickwall.jpg");
+		brickwall = new Texture("desktop/images/brickwall.jpg");
+
 		brickPositions = new Integer[13][29];
 		
 		//INITIALISING THE POSITIONS OF BRICKS

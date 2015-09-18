@@ -1,0 +1,19 @@
+
+walkLeftSheet.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+walkLeft01
+  rotate: false
+  xy: 1, 1
+  size: 45, 45
+  orig: 45, 45
+  offset: 0, 0
+  index: -1
+walkLeft02
+  rotate: false
+  xy: 48, 1
+  size: 45, 45
+  orig: 45, 45
+  offset: 0, 0
+  index: -1

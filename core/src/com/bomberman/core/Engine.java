@@ -76,7 +76,10 @@ public class Engine extends ApplicationAdapter {
 		}
 		for (Bomb bomb : bombs) {
 			if (!bomb.hasExploded()) {
-				bomb.isToExplode(elapsedTime);
+				if (bomb.isToExplode(elapsedTime)) {
+					bomb.setHasExploded(true);
+				}
+				
 				bomb.getBombSprite().draw(batch);
 			}
 		}

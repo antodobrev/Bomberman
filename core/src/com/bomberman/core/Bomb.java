@@ -24,6 +24,12 @@ public class Bomb {
 		return hasExploded;
 	}
 
+
+	
+	public void setHasExploded(boolean hasExploded) {
+		this.hasExploded = hasExploded;
+	}
+
 	public Texture getBombTexture() {
 		return bombTexture;
 	}
@@ -56,12 +62,12 @@ public class Bomb {
 		this.bombSprite = bombSprite;
 	}
 	
-	public void isToExplode(float timeElapsed) {
+	public boolean isToExplode(float timeElapsed) {
 		if (timeElapsed - this.timeInitialized >= 3f) {
-			this.hasExploded = true;
+			return true;
 		}
 		else {
-			this.hasExploded = false;
+			return false;
 		}
 	}
 }

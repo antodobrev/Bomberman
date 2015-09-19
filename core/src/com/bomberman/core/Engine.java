@@ -20,6 +20,9 @@ public class Engine extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private Player hero;
 	private List<Bomb> bombs;
+	private int maxBombs = 1;
+	private float putBombInterval = 1f;
+	private float lastBombInitialized;
 	
 	
 	//MAP ELEMENTS
@@ -64,7 +67,7 @@ public class Engine extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(background, 0, 0);
 		elapsedTime += Gdx.graphics.getDeltaTime();
-		
+		renderMap();
 		if (hero.isMoving()) {
 			batch.draw(hero.getPlayerAnimation().getKeyFrame(elapsedTime, true), hero.getPlayerX(), hero.getPlayerY());
 		}
@@ -72,9 +75,11 @@ public class Engine extends ApplicationAdapter {
 			batch.draw(hero.getPlayerTexture(), hero.getPlayerX(), hero.getPlayerY());
 		}
 		for (Bomb bomb : bombs) {
-			bomb.getBombSprite().draw(batch);
+			if (!bomb.hasExploded()) {
+				bomb.isToExplode(elapsedTime);
+				bomb.getBombSprite().draw(batch);
+			}
 		}
-		renderMap();
 		batch.end();
 	}
 
@@ -95,9 +100,10 @@ public class Engine extends ApplicationAdapter {
 			playerDirection = "up";
 			hero.movedUp();
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && elapsedTime - lastBombInitialized > putBombInterval) {
 			// TODO drop bomb
-			this.bombs.add(new Bomb("images/Bomb.png", hero.getPlayerX(), hero.getPlayerY()));
+			this.bombs.add(new Bomb("images/Bomb.png", hero.getPlayerX(), hero.getPlayerY(), elapsedTime));
+			lastBombInitialized = this.elapsedTime;
 		}
 		
 		if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) &&
@@ -108,6 +114,7 @@ public class Engine extends ApplicationAdapter {
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+			this.dispose();
 			System.exit(0);
 		}
 	}
@@ -115,5 +122,10 @@ public class Engine extends ApplicationAdapter {
 	public void renderMap(){
 		Renderer.wallRender(batch, wall);
 		Renderer.brickRender(batch, brickwall, brickPositions);
+	}
+	
+	@Override
+	public void dispose() {
+		batch.dispose();
 	}
 }

@@ -1,5 +1,7 @@
 package com.bomberman.core;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -12,9 +14,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.joints.FrictionJoint;
+import com.bomberman.core.characters.Player;
 
 public class Engine extends ApplicationAdapter {
 	private SpriteBatch batch;
+	private Player hero;
+	private List<Bomb> bombs;
 	
 	
 	//MAP ELEMENTS
@@ -24,13 +29,7 @@ public class Engine extends ApplicationAdapter {
 	private Integer[][] brickPositions;
 	
 	//PLAYER ELEMENTS
-	private Texture player;
-	private float playerX;
-	private float playerY;
-	private boolean isMoving;
 	private String playerDirection;
-	private TextureAtlas playerWalkDown;
-	private Animation animation;
 	private float elapsedTime = 0;
 	
 	
@@ -40,23 +39,18 @@ public class Engine extends ApplicationAdapter {
 		wall = new Texture("images/wall.png");
 		background = new Texture("images/background.jpg");
 		brickwall = new Texture("images/brickwall.jpg");
-		playerDirection = "right";
-		player = new Texture(Gdx.files.internal("images/character_walk_sheets/walk_" + playerDirection + "/stay.png"));
-		playerWalkDown = new TextureAtlas(Gdx.files.internal("images/character_walk_sheets/walk_" + playerDirection + "/walk.pack"));
-		animation = new Animation(1/3f, playerWalkDown.getRegions());
 		
-		playerX = 100;
-		playerY = 515;
-		isMoving = false;
+		playerDirection = "right";
+		
+		hero = new Player("images/character_walk_sheets/walk_", playerDirection, 100, 515);
+		bombs = new ArrayList<>();
 		
 		brickPositions = new Integer[13][29];
 		Init.brickInit(brickPositions);
 	}
 
 	public void update(){
-		player = new Texture(Gdx.files.internal("images/character_walk_sheets/walk_" + playerDirection + "/stay.png"));
-		playerWalkDown = new TextureAtlas(Gdx.files.internal("images/character_walk_sheets/walk_" + playerDirection + "/walk.pack"));
-		animation = new Animation(1/3f, playerWalkDown.getRegions());
+		this.hero.update(playerDirection);
 	}
 	
 	@Override
@@ -70,11 +64,15 @@ public class Engine extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(background, 0, 0);
 		elapsedTime += Gdx.graphics.getDeltaTime();
-		if(isMoving){
-			batch.draw(animation.getKeyFrame(elapsedTime, true), playerX , playerY);
+		
+		if (hero.isMoving()) {
+			batch.draw(hero.getPlayerAnimation().getKeyFrame(elapsedTime, true), hero.getPlayerX(), hero.getPlayerY());
 		}
-		else{
-			batch.draw(player, playerX, playerY);
+		else {
+			batch.draw(hero.getPlayerTexture(), hero.getPlayerX(), hero.getPlayerY());
+		}
+		for (Bomb bomb : bombs) {
+			bomb.getBombSprite().draw(batch);
 		}
 		renderMap();
 		batch.end();
@@ -82,31 +80,31 @@ public class Engine extends ApplicationAdapter {
 
 	private void handleUserInput() {
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			playerX-= 1.75f;
 			playerDirection = "left";
-			isMoving = true;
+			hero.movedLeft();
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			playerX+= 1.75f;
 			playerDirection = "right";
-			isMoving = true;
+			hero.movedRight();
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			playerY-= 1.75f;
 			playerDirection = "down";
-			isMoving = true;
+			hero.movedDown();
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			playerY+= 1.75f;
 			playerDirection = "up";
-			isMoving = true;
+			hero.movedUp();
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+			// TODO drop bomb
+			this.bombs.add(new Bomb("images/Bomb.png", hero.getPlayerX(), hero.getPlayerY()));
 		}
 		
 		if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) &&
 		   !Gdx.input.isKeyPressed(Input.Keys.RIGHT) &&
 		   !Gdx.input.isKeyPressed(Input.Keys.DOWN) &&
 		   !Gdx.input.isKeyPressed(Input.Keys.UP)){
-			isMoving = false;
+			hero.setMoving(false);
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){

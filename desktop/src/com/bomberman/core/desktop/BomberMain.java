@@ -10,7 +10,7 @@ public class BomberMain {
 		
 		config.title = "BomberMan";
 		config.useGL30 = true;
-		config.fullscreen = true;
+		//config.fullscreen = true;
 		config.width = 1366;
 		config.height = 768;
 		

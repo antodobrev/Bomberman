@@ -1,6 +1,9 @@
 package com.bomberman.core;
 
+import java.util.ArrayList;
 import java.util.Random;
+
+import com.bomberman.objects.Wall;
 
 final class Init {
 	
@@ -64,6 +67,28 @@ final class Init {
 		//END INITIALISE OF BRICKS
 		
 		return brickPositions;
+	}
+
+	public static ArrayList<Wall> wallInit(ArrayList<Wall> wallPositions){
+		//BORDER RENDERING
+		for (int i = 0; i < 15; i++) {
+			wallPositions.add(new Wall(60, 40 + (i * 40)));
+			wallPositions.add(new Wall(1260, 40 + (i * 40)));
+		}
+		
+		for (int i = 0; i < 29; i++) {
+			wallPositions.add(new Wall(100 + i * 40, 40));
+			wallPositions.add(new Wall(100 + i * 40, 600));
+		}
+		
+		//INNER WALL RENDERING
+		for (int i = 120; i < 600; i+= 80) {
+			for (int j = 140; j < 1200; j+= 80) {
+				wallPositions.add(new Wall(j, i));
+			}
+		}
+		
+		return wallPositions;
 	}
 }
 

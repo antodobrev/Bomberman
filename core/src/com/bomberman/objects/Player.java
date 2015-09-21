@@ -1,4 +1,4 @@
-package com.bomberman.core.characters;
+package com.bomberman.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,20 +16,24 @@ public class Player {
 	private float playerY;
 	private boolean isMoving;
 	private String playerDirection;
-	private TextureAtlas playerWalkDown;
+	private TextureAtlas playerWalk;
 	private Animation playerAnimation;
 	
-	public Player(String initialImageSource, String direction, float initialXPos, float initialYPos) {
-		this.playerTexture = new Texture(Gdx.files.internal(initialImageSource + direction + STAY_POSITION));
-		this.playerWalkDown = new TextureAtlas(Gdx.files.internal(initialImageSource + direction + WALK_PACK));
-		this.playerAnimation = new Animation(FRAME_DURATION, this.playerWalkDown.getRegions());
+	public Player(String initialImageSource, float initialXPos, float initialYPos) {
+		this.playerTexture = new Texture(Gdx.files.internal(initialImageSource + "right" + STAY_POSITION));
+		this.playerWalk = new TextureAtlas(Gdx.files.internal(initialImageSource + "right" + WALK_PACK));
+		this.playerAnimation = new Animation(FRAME_DURATION, this.playerWalk.getRegions());
 		setPlayerX(initialXPos);
 		setPlayerY(initialYPos);
+		this.setPlayerDirection("right");
 		setMoving(false);
 	}
 	
+	//PROPERTIES
+	
+	//COORDINATES
 	public float getPlayerX() {
-		return playerX;
+		return this.playerX;
 	}
 
 	public void setPlayerX(float playerX) {
@@ -37,23 +41,34 @@ public class Player {
 	}
 
 	public float getPlayerY() {
-		return playerY;
+		return this.playerY;
 	}
 
 	public void setPlayerY(float playerY) {
 		this.playerY = playerY;
 	}
 
+	//DIRECTION
+	public String getPlayerDirection() {
+		return this.playerDirection;
+	}
+
+	public void setPlayerDirection(String playerDirection) {
+		this.playerDirection = playerDirection;
+	}
+
+	//MOVEMENT
 	public boolean isMoving() {
-		return isMoving;
+		return this.isMoving;
 	}
 
 	public void setMoving(boolean isMoving) {
 		this.isMoving = isMoving;
 	}
 
+	//GRAPHICS
 	public Texture getPlayerTexture() {
-		return playerTexture;
+		return this.playerTexture;
 	}
 
 	public void setPlayerTexture(Texture playerTexture) {
@@ -62,35 +77,36 @@ public class Player {
 
 	
 	public Animation getPlayerAnimation() {
-		return playerAnimation;
+		return this.playerAnimation;
 	}
 
 	public void setPlayerAnimation(Animation playerAnimation) {
 		this.playerAnimation = playerAnimation;
 	}
-
-	public void update(String direction) {
-		this.playerTexture = new Texture(Gdx.files.internal("images/character_walk_sheets/walk_" + direction + STAY_POSITION));
-		this.playerWalkDown = new TextureAtlas(Gdx.files.internal("images/character_walk_sheets/walk_" + direction + WALK_PACK));
-		this.playerAnimation = new Animation(FRAME_DURATION, this.playerWalkDown.getRegions());
+	
+	//METHODS
+	public void update() {
+		this.playerTexture = new Texture(Gdx.files.internal("images/character_walk_sheets/walk_" + this.playerDirection + STAY_POSITION));
+		this.playerWalk = new TextureAtlas(Gdx.files.internal("images/character_walk_sheets/walk_" + this.playerDirection + WALK_PACK));
+		this.playerAnimation = new Animation(FRAME_DURATION, this.playerWalk.getRegions());
 	}
 
-	public void movedLeft() {
+	public void moveLeft() {
 		setPlayerX(getPlayerX() - STEP_IN_PIXELS);
 		setMoving(true);
 	}
 
-	public void movedRight() {
+	public void moveRight() {
 		setPlayerX(getPlayerX() + STEP_IN_PIXELS);
 		setMoving(true);
 	}
 	
-	public void movedDown() {
+	public void moveDown() {
 		setPlayerY(getPlayerY() - STEP_IN_PIXELS);
 		setMoving(true);
 	}
 	
-	public void movedUp() {
+	public void moveUp() {
 		setPlayerY(getPlayerY() + STEP_IN_PIXELS);
 		setMoving(true);
 	}

@@ -93,28 +93,28 @@ public class Engine extends ApplicationAdapter {
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			hero.setPlayerDirection("left");
-			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkLeft(hero, walls)){
+			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
 				hero.moveLeft();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			hero.setPlayerDirection("right");
-			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkRight(hero, walls)){
+			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
 				hero.moveRight();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 			hero.setPlayerDirection("down");
-			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkBottom(hero, walls)){
+			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
 				hero.moveDown();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			hero.setPlayerDirection("up");
-			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkTop(hero, walls)){
+			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
 				hero.moveUp();
 			}
 		}

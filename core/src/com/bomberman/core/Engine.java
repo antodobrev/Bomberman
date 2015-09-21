@@ -79,9 +79,20 @@ public class Engine extends ApplicationAdapter {
 		else {
 			batch.draw(hero.getPlayerTexture(), hero.getPlayerX(), hero.getPlayerY());
 		}
+		
 		for (Bomb bomb : bombs) {
 			bomb.update(elapsedTime, batch);
+			if(bomb.hasExploded()){
+				bomb.explode(brickPositions);
+			}
 		}
+		
+		for (int i = 0; i < bombs.size(); i++) {
+			if(bombs.get(i).hasExploded()){
+				bombs.remove(i);
+			}
+		}
+		
 		String coordinateX = String.format("Player X - %.1f", hero.getPlayerX());
 		String coordinateY = String.format("Player Y - %.1f", hero.getPlayerY());
 		font.draw(batch, coordinateX, 100, 700);
@@ -130,6 +141,12 @@ public class Engine extends ApplicationAdapter {
 		   !Gdx.input.isKeyPressed(Input.Keys.DOWN) &&
 		   !Gdx.input.isKeyPressed(Input.Keys.UP)){
 			hero.setMoving(false);
+		}
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.B)){
+			for (int i = 0; i < 14; i++) {
+				brickPositions[12][i] = 0;
+			}
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){

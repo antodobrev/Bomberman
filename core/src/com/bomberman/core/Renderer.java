@@ -35,7 +35,7 @@ public final class Renderer {
 			if(i%2 == 0){
 				//IF ITS A BLANK LINE
 				for (int j = 0; j < 29; j++) {
-					//[i - 40 / 40][j - 100 / 40]
+					//[(i / 40) - 80][(j / 40) - 100]
 					if(brickPositions[i][j] > 0){
 						batch.draw(brick, (j * 40) + 100, (i * 40) + 80);
 					}
@@ -44,7 +44,7 @@ public final class Renderer {
 			else{
 				//IF ITS A LINE WITH WALLS
 				for (int j = 0; j < 28; j+=2) {
-					//[i - 40 / 40][j - 100 / 40]
+					//[(i / 40) - 80][(j / 40) - 100]
 					if(brickPositions[i][j] > 0){
 						batch.draw(brick, (j * 40) + 100, (i * 40) + 80);
 					}

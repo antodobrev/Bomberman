@@ -17,6 +17,8 @@ public class Bomb {
 	public Bomb(String imageSource, float posX, float posY, float timeInitialized) {
 		this.bombTexture = new Texture(Gdx.files.internal(imageSource));
 		this.bombSprite = new Sprite(this.getBombTexture());
+		this.setBombX(posX + 20);
+		this.setBombY(posY + 20);
 		this.bombSprite.setPosition(posX, posY);
 		this.timeInitialized = timeInitialized;
 		this.hasExploded = false;
@@ -82,6 +84,43 @@ public class Bomb {
 				this.setHasExploded(true);
 			}
 			this.getBombSprite().draw(batch);
+		}
+	}
+	
+	public void explode(Integer[][] brickPositions){
+		int positionX = ((int)(this.bombY - 80)) / 40;
+		int positionY = ((int)(this.bombX - 100)) / 40;
+	
+		System.out.println(positionX);
+		System.out.println(positionY);
+		
+		if(positionX == 0){
+			brickPositions[0][positionY] = 0;	
+		}
+		else{
+			brickPositions[positionX - 1][positionY] = 0;
+		}
+		
+		if(positionY == 0){
+			brickPositions[positionX][0] = 0;
+		}
+		else{
+			brickPositions[positionX][positionY - 1] = 0;
+		}
+		
+		if(positionX == 12){
+			brickPositions[12][positionY] = 0;
+		}
+		else{
+			brickPositions[positionX + 1][positionY] = 0;
+		}
+		
+		if(positionY == 29){
+
+			brickPositions[positionX][29] = 0;
+		}
+		else{
+			brickPositions[positionX][positionY + 1] = 0;
 		}
 	}
 }

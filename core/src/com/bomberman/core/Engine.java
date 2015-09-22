@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.joints.FrictionJoint;
 import com.bomberman.objects.Bomb;
+import com.bomberman.objects.Enemy;
 import com.bomberman.objects.Player;
 import com.bomberman.objects.Wall;
 
@@ -40,6 +41,9 @@ public class Engine extends ApplicationAdapter {
 	private float putBombInterval = 1f;
 	private float lastBombInitialized;
 	
+	//ENEMY DATA
+	private Enemy enemy;
+	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -50,6 +54,8 @@ public class Engine extends ApplicationAdapter {
 		
 		hero = new Player("images/character_walk_sheets/walk_", 100, 555);
 		bombs = new ArrayList<>();
+		enemy = new Enemy(100, 560);
+		
 		
 		brickPositions = new Integer[13][29];
 		Init.brickInit(brickPositions);
@@ -60,6 +66,7 @@ public class Engine extends ApplicationAdapter {
 	public void update(){
 		this.handleUserInput();
 		this.hero.update();
+		this.enemy.update(walls, brickPositions);
 	}
 	
 	@Override
@@ -74,11 +81,13 @@ public class Engine extends ApplicationAdapter {
 		elapsedTime += Gdx.graphics.getDeltaTime();
 		renderMap();
 		if (hero.isMoving()) {
-			batch.draw(hero.getPlayerAnimation().getKeyFrame(elapsedTime, true), hero.getPlayerX(), hero.getPlayerY());
+			batch.draw(hero.getAnimation().getKeyFrame(elapsedTime, true), hero.getX(), hero.getY());
 		}
 		else {
-			batch.draw(hero.getPlayerTexture(), hero.getPlayerX(), hero.getPlayerY());
+			batch.draw(hero.getPlayerTexture(), hero.getX(), hero.getY());
 		}
+		
+		batch.draw(enemy.getAnimation().getKeyFrame(elapsedTime, true), enemy.getX(), enemy.getY());
 		
 		for (Bomb bomb : bombs) {
 			bomb.update(elapsedTime, batch);
@@ -93,38 +102,40 @@ public class Engine extends ApplicationAdapter {
 			}
 		}
 		
-		String coordinateX = String.format("Player X - %.1f", hero.getPlayerX());
-		String coordinateY = String.format("Player Y - %.1f", hero.getPlayerY());
+		String coordinateX = String.format("Player X - %.1f", hero.getX());
+		String coordinateY = String.format("Player Y - %.1f", hero.getY());
+		String enemyDirection = String.format("Enemy dir - %s", enemy.getDirection());
 		font.draw(batch, coordinateX, 100, 700);
 		font.draw(batch, coordinateY, 100, 680);
+		font.draw(batch, enemyDirection, 100, 660);
 		batch.end();
 	}
 
 	private void handleUserInput() {
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			hero.setPlayerDirection("left");
+			hero.setDirection("left");
 			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
 				hero.moveLeft();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			hero.setPlayerDirection("right");
+			hero.setDirection("right");
 			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
 				hero.moveRight();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			hero.setPlayerDirection("down");
+			hero.setDirection("down");
 			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
 				hero.moveDown();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			hero.setPlayerDirection("up");
+			hero.setDirection("up");
 			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
 				hero.moveUp();
 			}
@@ -132,7 +143,7 @@ public class Engine extends ApplicationAdapter {
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && elapsedTime - lastBombInitialized > putBombInterval) {
 			// TODO drop bomb
-			this.bombs.add(new Bomb("images/Bomb.png", hero.getPlayerX(), hero.getPlayerY(), elapsedTime));
+			this.bombs.add(new Bomb("images/Bomb.png", hero.getX(), hero.getY(), elapsedTime));
 			lastBombInitialized = this.elapsedTime;
 		}
 		

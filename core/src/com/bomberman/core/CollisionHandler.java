@@ -2,7 +2,7 @@ package com.bomberman.core;
 
 import java.util.ArrayList;
 
-import com.bomberman.objects.Player;
+import com.bomberman.objects.Character;
 import com.bomberman.objects.Wall;
 
 public final class CollisionHandler {
@@ -10,28 +10,28 @@ public final class CollisionHandler {
 	private CollisionHandler(){
 	}
 	
-	public static boolean checkInTheBox(Player hero){
-		switch(hero.getPlayerDirection()){
+	public static boolean checkInTheBox(Character character){
+		switch(character.getDirection()){
 		case "left":
-			if(hero.getPlayerX() - hero.STEP_IN_PIXELS < 98){
+			if(character.getX() - character.STEP_IN_PIXELS < 98){
 			return false;
 			}
 			break;
 		
 		case "right":
-			if(hero.getPlayerX() + 38 + hero.STEP_IN_PIXELS > 1260){
+			if(character.getX() + 38 + character.STEP_IN_PIXELS > 1260){
 			return false;
 			}
 			break;
 		
 		case "down":
-			if(hero.getPlayerY() - hero.STEP_IN_PIXELS < 75){
+			if(character.getY() - character.STEP_IN_PIXELS < 75){
 			return false;
 			}
 			break;
 		
 		case "up":
-			if(hero.getPlayerY() + 38 + hero.STEP_IN_PIXELS > 600){
+			if(character.getY() + 38 + character.STEP_IN_PIXELS > 600){
 			return false;
 			}
 			break;
@@ -39,36 +39,36 @@ public final class CollisionHandler {
 		return true;
 	}
 	
-	public static boolean checkCollision(Player hero, ArrayList<Wall> walls, Integer[][] brickPositions){
+	public static boolean checkCollision(Character character, ArrayList<Wall> walls, Integer[][] brickPositions){
 
-		if(!wallCheck(hero, walls) || !brickCheck(hero, brickPositions)){
+		if(!wallCheck(character, walls) || !brickCheck(character, brickPositions)){
 			return false;
 		}
 		
 		return true;
 	}
 	
-	public static boolean wallCheck(Player hero, ArrayList<Wall> walls){
+	public static boolean wallCheck(Character character, ArrayList<Wall> walls){
 		for (int i = 0; i < walls.size(); i++) {
 			Wall currentWall = walls.get(i);
-			switch(hero.getPlayerDirection()){
+			switch(character.getDirection()){
 			case "left":
-				if(!checkLeft(hero, currentWall)){
+				if(!checkLeft(character, currentWall)){
 					return false;
 				}
 				break;
 			case "right":
-				if(!checkRight(hero, currentWall)){
+				if(!checkRight(character, currentWall)){
 					return false;
 				}
 				break;
 			case "up":
-				if(!checkTop(hero, currentWall)){
+				if(!checkTop(character, currentWall)){
 					return false;
 				}
 				break;
 			case "down":
-				if(!checkBottom(hero, currentWall)){
+				if(!checkBottom(character, currentWall)){
 					return false;
 				}
 				break;
@@ -78,29 +78,29 @@ public final class CollisionHandler {
 		return true;
 	}
 	
-	public static boolean brickCheck(Player hero, Integer[][] brickPositions){
+	public static boolean brickCheck(Character character, Integer[][] brickPositions){
 		for (int i = 0; i < 13; i++) {
 			for (int j = 0; j < 29; j++) {
 				if(brickPositions[i][j] > 0){
 					Wall currentWall = new Wall((j * 40) + 100, (i * 40) + 80);
-					switch(hero.getPlayerDirection()){
+					switch(character.getDirection()){
 					case "left":
-						if(!checkLeft(hero, currentWall)){
+						if(!checkLeft(character, currentWall)){
 							return false;
 						}
 						break;
 					case "right":
-						if(!checkRight(hero, currentWall)){
+						if(!checkRight(character, currentWall)){
 							return false;
 						}
 						break;
 					case "up":
-						if(!checkTop(hero, currentWall)){
+						if(!checkTop(character, currentWall)){
 							return false;
 						}
 						break;
 					case "down":
-						if(!checkBottom(hero, currentWall)){
+						if(!checkBottom(character, currentWall)){
 							return false;
 						}
 						break;
@@ -112,76 +112,76 @@ public final class CollisionHandler {
 		return true;
 	}
 	
-	public static boolean checkLeft(Player hero, Wall currentWall){
+	public static boolean checkLeft(Character character, Wall currentWall){
 		
-		if(hero.getPlayerX() - hero.STEP_IN_PIXELS < currentWall.wallRight &&
-		   hero.getPlayerX() - hero.STEP_IN_PIXELS > currentWall.wallLeft &&
-		   hero.getPlayerY() < currentWall.wallTop - 5 &&
-		   hero.getPlayerY() > currentWall.wallBottom){
+		if(character.getX() - character.STEP_IN_PIXELS < currentWall.wallRight &&
+		   character.getX() - character.STEP_IN_PIXELS > currentWall.wallLeft &&
+		   character.getY() < currentWall.wallTop - 5 &&
+		   character.getY() > currentWall.wallBottom){
 			return false;
 		}
 		
-		if(hero.getPlayerX() - hero.STEP_IN_PIXELS < currentWall.wallRight &&
-		   hero.getPlayerX() - hero.STEP_IN_PIXELS > currentWall.wallLeft &&
-		   hero.getPlayerY() + 35 < currentWall.wallTop &&
-		   hero.getPlayerY() + 35 > currentWall.wallBottom + 5){
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public static boolean checkRight(Player hero, Wall currentWall){
-
-		if(hero.getPlayerX() + 35 + hero.STEP_IN_PIXELS > currentWall.wallLeft &&
-		   hero.getPlayerX() + 35 + hero.STEP_IN_PIXELS < currentWall.wallRight &&
-		   hero.getPlayerY() < currentWall.wallTop - 5 &&
-		   hero.getPlayerY() > currentWall.wallBottom){
-			return false;
-		}
-		
-		if(hero.getPlayerX() + 35 + hero.STEP_IN_PIXELS > currentWall.wallLeft &&
-		   hero.getPlayerX() + 35 + hero.STEP_IN_PIXELS < currentWall.wallRight &&
-		   hero.getPlayerY() + 35 < currentWall.wallTop &&
-		   hero.getPlayerY() + 35 > currentWall.wallBottom + 5){
-			return false;
-		}
-		
-		return true;
-	}
-
-	public static boolean checkBottom(Player hero, Wall currentWall){
-	
-		if(hero.getPlayerY() + 5 - hero.STEP_IN_PIXELS < currentWall.wallTop &&
-		   hero.getPlayerY() + 5 - hero.STEP_IN_PIXELS > currentWall.wallBottom &&
-		   hero.getPlayerX() < currentWall.wallRight &&
-		   hero.getPlayerX() > currentWall.wallLeft - 5){
-			return false;
-		}
-		
-		if(hero.getPlayerY() - hero.STEP_IN_PIXELS < currentWall.wallTop &&
-		   hero.getPlayerY() - hero.STEP_IN_PIXELS > currentWall.wallBottom &&
-		   hero.getPlayerX() + 35 < currentWall.wallRight + 5 &&
-		   hero.getPlayerX() + 35 > currentWall.wallLeft){
+		if(character.getX() - character.STEP_IN_PIXELS < currentWall.wallRight &&
+		   character.getX() - character.STEP_IN_PIXELS > currentWall.wallLeft &&
+		   character.getY() + 35 < currentWall.wallTop &&
+		   character.getY() + 35 > currentWall.wallBottom + 5){
 			return false;
 		}
 		
 		return true;
 	}
 	
-	public static boolean checkTop(Player hero, Wall currentWall){
+	public static boolean checkRight(Character character, Wall currentWall){
 
-		if(hero.getPlayerY() + 35 + hero.STEP_IN_PIXELS < currentWall.wallTop &&
-		   hero.getPlayerY() + 35 + hero.STEP_IN_PIXELS > currentWall.wallBottom &&
-		   hero.getPlayerX() < currentWall.wallRight &&
-		   hero.getPlayerX() > currentWall.wallLeft - 5){
+		if(character.getX() + 35 + character.STEP_IN_PIXELS > currentWall.wallLeft &&
+		   character.getX() + 35 + character.STEP_IN_PIXELS < currentWall.wallRight &&
+		   character.getY() < currentWall.wallTop - 5 &&
+		   character.getY() > currentWall.wallBottom){
 			return false;
 		}
 		
-		if(hero.getPlayerY() + 35 + hero.STEP_IN_PIXELS < currentWall.wallTop &&
-		   hero.getPlayerY() + 35 + hero.STEP_IN_PIXELS > currentWall.wallBottom &&
-		   hero.getPlayerX() + 35 < currentWall.wallRight + 5 &&
-		   hero.getPlayerX() + 35 > currentWall.wallLeft){
+		if(character.getX() + 35 + character.STEP_IN_PIXELS > currentWall.wallLeft &&
+		   character.getX() + 35 + character.STEP_IN_PIXELS < currentWall.wallRight &&
+		   character.getY() + 35 < currentWall.wallTop &&
+		   character.getY() + 35 > currentWall.wallBottom + 5){
+			return false;
+		}
+		
+		return true;
+	}
+
+	public static boolean checkBottom(Character character, Wall currentWall){
+	
+		if(character.getY() + 5 - character.STEP_IN_PIXELS < currentWall.wallTop &&
+		   character.getY() + 5 - character.STEP_IN_PIXELS > currentWall.wallBottom &&
+		   character.getX() < currentWall.wallRight &&
+		   character.getX() > currentWall.wallLeft - 5){
+			return false;
+		}
+		
+		if(character.getY() - character.STEP_IN_PIXELS < currentWall.wallTop &&
+		   character.getY() - character.STEP_IN_PIXELS > currentWall.wallBottom &&
+		   character.getX() + 35 < currentWall.wallRight + 5 &&
+		   character.getX() + 35 > currentWall.wallLeft){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean checkTop(Character character, Wall currentWall){
+
+		if(character.getY() + 35 + character.STEP_IN_PIXELS < currentWall.wallTop &&
+		   character.getY() + 35 + character.STEP_IN_PIXELS > currentWall.wallBottom &&
+		   character.getX() < currentWall.wallRight &&
+		   character.getX() > currentWall.wallLeft - 5){
+			return false;
+		}
+		
+		if(character.getY() + 35 + character.STEP_IN_PIXELS < currentWall.wallTop &&
+		   character.getY() + 35 + character.STEP_IN_PIXELS > currentWall.wallBottom &&
+		   character.getX() + 35 < currentWall.wallRight + 5 &&
+		   character.getX() + 35 > currentWall.wallLeft){
 			return false;
 		}
 		

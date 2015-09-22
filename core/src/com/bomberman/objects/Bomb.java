@@ -19,7 +19,9 @@ public class Bomb {
 		this.bombSprite = new Sprite(this.getBombTexture());
 		this.setBombX(posX + 20);
 		this.setBombY(posY + 20);
-		this.bombSprite.setPosition(posX, posY);
+		float x = (int)((this.getBombX() - 100) / 40) * 40 + 100;
+		float y = (int)((this.getBombY() - 80) / 40) * 40 + 80;
+		this.bombSprite.setPosition(x, y);
 		this.timeInitialized = timeInitialized;
 		this.hasExploded = false;
 	}

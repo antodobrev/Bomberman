@@ -91,36 +91,21 @@ public class Bomb {
 		int positionX = ((int)(this.bombY - 80)) / 40;
 		int positionY = ((int)(this.bombX - 100)) / 40;
 	
-		System.out.println(positionX);
-		System.out.println(positionY);
 		
-		if(positionX == 0){
-			brickPositions[0][positionY] = 0;	
-		}
-		else{
-			brickPositions[positionX - 1][positionY] = 0;
-		}
 		
-		if(positionY == 0){
-			brickPositions[positionX][0] = 0;
-		}
-		else{
-			brickPositions[positionX][positionY - 1] = 0;
-		}
+		int leftBrickX = positionX == 0 ? 1 : positionX;
 		
-		if(positionX == 12){
-			brickPositions[12][positionY] = 0;
-		}
-		else{
-			brickPositions[positionX + 1][positionY] = 0;
-		}
+		int leftBrickY = positionY == 0 ? 1 : positionY;
 		
-		if(positionY == 29){
+		int rightBrickX = positionX == 12 ? 11 : positionX;
+		
+		int rightBrickY = positionY == 12 ? 11 : positionY;
+		
 
-			brickPositions[positionX][29] = 0;
-		}
-		else{
-			brickPositions[positionX][positionY + 1] = 0;
-		}
+		
+		brickPositions[leftBrickX - 1][positionY] = 0;
+		brickPositions[rightBrickX + 1][positionY] = 0;
+		brickPositions[positionX][leftBrickY - 1] = 0;
+		brickPositions[positionX][rightBrickY + 1] = 0;
 	}
 }

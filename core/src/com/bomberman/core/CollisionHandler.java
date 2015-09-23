@@ -190,7 +190,7 @@ public final class CollisionHandler {
 				if(!checkTop(character, currentWall)){
 					if(character.getClass().equals(Player.class)){
 						float y = (int)(currentBomb.getBombY() - 80) / 40;
-						y = ((y - 1) * 40) + 80;
+						y = ((y + 1) * 40) + 80;
 						character.setY(y);
 					}
 					return false;

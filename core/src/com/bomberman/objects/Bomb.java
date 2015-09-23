@@ -115,19 +115,19 @@ public class Bomb {
 		for (int i = 0; i < enemies.size(); i++) {
 			Enemy currentEnemy = enemies.get(i);
 			
-			if(currentEnemy.getX() + 20 > this.bombX - 40 
-					&& currentEnemy.getX() + 20 < this.bombX + 40 
-					&& currentEnemy.getY() + 20 > this.bombY - 40
-					&& currentEnemy.getY() + 20 < this.bombY + 40){
+			if(currentEnemy.getX() + 20 > this.bombX - 60 
+					&& currentEnemy.getX() + 20 < this.bombX + 60 
+					&& currentEnemy.getY() + 20 > this.bombY - 60
+					&& currentEnemy.getY() + 20 < this.bombY + 60){
 				enemies.remove(currentEnemy);
 			}
 			
 		}
 		
-		if(character.getX() + 20 > this.bombX - 40 
-				&& character.getX() + 20 < this.bombX + 40 
-				&& character.getY() + 20 > this.bombY - 40
-				&& character.getY() + 20 < this.bombY + 40){
+		if(character.getX() + 10 > this.bombX - 40 
+				&& character.getX() + 10 < this.bombX + 40 
+				&& character.getY() + 10 > this.bombY - 40
+				&& character.getY() + 10 < this.bombY + 40){
 			System.exit(0);
 		}
 	}

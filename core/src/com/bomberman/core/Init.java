@@ -120,7 +120,7 @@ final class Init {
 		}
 		
 		for (int i = 0; i < enemies.size(); i++) {
-			if(enemies.get(i).getX() < 500 && enemies.get(i).getY() > 300){
+			if(enemies.get(i).getX() < 700 && enemies.get(i).getY() > 300){
 				enemies.remove(enemies.get(i));
 			}
 		}

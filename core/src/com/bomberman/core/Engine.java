@@ -98,7 +98,7 @@ public class Engine extends ApplicationAdapter {
 		for (Bomb bomb : bombs) {
 			bomb.update(elapsedTime, batch);
 			if(bomb.hasExploded()){
-				bomb.explode(brickPositions, enemies);
+				bomb.explode(brickPositions, enemies, hero);
 			}
 		}
 		

@@ -91,7 +91,7 @@ public class Bomb {
 		}
 	}
 	
-	public void explode(Integer[][] brickPositions, ArrayList<Enemy> enemies){
+	public void explode(Integer[][] brickPositions, ArrayList<Enemy> enemies, Character character){
 		int positionX = ((int)(this.bombY - 80)) / 40;
 		int positionY = ((int)(this.bombX - 100)) / 40;
 	
@@ -122,6 +122,13 @@ public class Bomb {
 				enemies.remove(currentEnemy);
 			}
 			
+		}
+		
+		if(character.getX() + 20 > this.bombX - 40 
+				&& character.getX() + 20 < this.bombX + 40 
+				&& character.getY() + 20 > this.bombY - 40
+				&& character.getY() + 20 < this.bombY + 40){
+			System.exit(0);
 		}
 	}
 }

@@ -111,10 +111,6 @@ public class Engine extends ApplicationAdapter {
 			}
 		}
 		
-		String coordinateX = String.format("Player X - %.1f", hero.getX());
-		String coordinateY = String.format("Player Y - %.1f", hero.getY());
-		font.draw(batch, coordinateX, 100, 700);
-		font.draw(batch, coordinateY, 100, 680);
 		batch.end();
 	}
 

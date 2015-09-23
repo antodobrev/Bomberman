@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.bomberman.objects.Bomb;
 import com.bomberman.objects.Character;
+import com.bomberman.objects.Enemy;
 import com.bomberman.objects.Player;
 import com.bomberman.objects.Wall;
 
@@ -123,6 +124,36 @@ public final class CollisionHandler {
 						break;
 					}
 				}
+			}
+		}
+		
+		return true;
+	}
+
+	public static boolean enemyCheck(Character character, ArrayList<Enemy> enemies){
+		for(Enemy e : enemies){
+			Wall currentWall = new Wall(e.getX(), e.getY());
+			switch(character.getDirection()){
+			case "left":
+				if(!checkLeft(character, currentWall)){
+					return false;
+				}
+				break;
+			case "right":
+				if(!checkRight(character, currentWall)){
+					return false;
+				}
+				break;
+			case "up":
+				if(!checkTop(character, currentWall)){
+					return false;
+				}
+				break;
+			case "down":
+				if(!checkBottom(character, currentWall)){
+					return false;
+				}
+				break;
 			}
 		}
 		

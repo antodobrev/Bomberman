@@ -68,6 +68,9 @@ public class Engine extends ApplicationAdapter {
 		CollisionHandler.returnInBox(hero);
 		this.handleUserInput();
 		this.hero.update();
+		if(!CollisionHandler.enemyCheck(hero, enemies)){
+			System.exit(0);
+		}
 		
 		for(Enemy e : enemies){
 			e.update(walls, brickPositions, bombs);

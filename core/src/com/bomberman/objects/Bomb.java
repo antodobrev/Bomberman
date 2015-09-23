@@ -1,5 +1,7 @@
 package com.bomberman.objects;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -89,7 +91,7 @@ public class Bomb {
 		}
 	}
 	
-	public void explode(Integer[][] brickPositions){
+	public void explode(Integer[][] brickPositions, ArrayList<Enemy> enemies){
 		int positionX = ((int)(this.bombY - 80)) / 40;
 		int positionY = ((int)(this.bombX - 100)) / 40;
 	
@@ -109,5 +111,17 @@ public class Bomb {
 		brickPositions[rightBrickX + 1][positionY] = 0;
 		brickPositions[positionX][leftBrickY - 1] = 0;
 		brickPositions[positionX][rightBrickY + 1] = 0;
+		
+		for (int i = 0; i < enemies.size(); i++) {
+			Enemy currentEnemy = enemies.get(i);
+			
+			if(currentEnemy.getX() + 20 > this.bombX - 40 
+					&& currentEnemy.getX() + 20 < this.bombX + 40 
+					&& currentEnemy.getY() + 20 > this.bombY - 40
+					&& currentEnemy.getY() + 20 < this.bombY + 40){
+				enemies.remove(currentEnemy);
+			}
+			
+		}
 	}
 }

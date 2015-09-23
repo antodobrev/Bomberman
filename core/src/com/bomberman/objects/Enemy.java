@@ -20,8 +20,8 @@ public class Enemy extends Character{
 	}
 	
 	//METHODS
-	public void update(ArrayList<Wall> walls, Integer[][] brickPositions){
-		if(!CollisionHandler.checkInTheBox(this) || !CollisionHandler.checkCollision(this, walls, brickPositions))
+	public void update(ArrayList<Wall> walls, Integer[][] brickPositions, ArrayList<Bomb> bombs){
+		if(!CollisionHandler.checkInTheBox(this) || !CollisionHandler.checkCollision(this, walls, brickPositions, bombs))
 		{
 			this.changeDirection();
 		}

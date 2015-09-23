@@ -1,7 +1,11 @@
 package com.bomberman.core;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.bomberman.objects.Enemy;
 
 public final class Renderer {
 	
@@ -36,7 +40,7 @@ public final class Renderer {
 				//IF ITS A BLANK LINE
 				for (int j = 0; j < 29; j++) {
 					//[(i / 40) - 80][(j / 40) - 100]
-					if(brickPositions[i][j] > 0){
+					if(brickPositions[i][j] > 0 && brickPositions[i][j] < 10){
 						batch.draw(brick, (j * 40) + 100, (i * 40) + 80);
 					}
 				}
@@ -45,11 +49,18 @@ public final class Renderer {
 				//IF ITS A LINE WITH WALLS
 				for (int j = 0; j < 28; j+=2) {
 					//[(i / 40) - 80][(j / 40) - 100]
-					if(brickPositions[i][j] > 0){
+					if(brickPositions[i][j] > 0 && brickPositions[i][j] < 10){
 						batch.draw(brick, (j * 40) + 100, (i * 40) + 80);
 					}
 				}
 			}
+		}
+	}
+
+	public static void enemyRender(SpriteBatch batch, float elapsedTime, ArrayList<Enemy> enemies){
+	
+		for(Enemy e : enemies){
+			batch.draw(e.getAnimation().getKeyFrame(elapsedTime, true), e.getX(), e.getY());
 		}
 	}
 }

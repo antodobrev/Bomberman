@@ -3,6 +3,7 @@ package com.bomberman.core;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.bomberman.objects.Enemy;
 import com.bomberman.objects.Wall;
 
 final class Init {
@@ -27,8 +28,8 @@ final class Init {
 				if(i%2 == 0){
 					//IF ITS A BLANK LINE
 					for (int j = 2; j < 29; j++) {
-						int shouldSpawn = rndSpawner.nextInt(3);
-						if(shouldSpawn > 0){
+						int shouldSpawn = rndSpawner.nextInt(10);
+						if(shouldSpawn > 0 && shouldSpawn < 6){
 							brickPositions[i][j] = 1;
 						}
 					}
@@ -36,8 +37,8 @@ final class Init {
 				else{
 					//IF ITS A LINE WITH WALLS
 					for (int j = 2; j < 29; j+=2) {
-						int shouldSpawn = rndSpawner.nextInt(3);
-						if(shouldSpawn > 0){
+						int shouldSpawn = rndSpawner.nextInt(10);
+						if(shouldSpawn > 0 && shouldSpawn < 6){
 							brickPositions[i][j] = 1;
 						}
 					}
@@ -48,8 +49,8 @@ final class Init {
 			if(i%2 == 0){
 				//IF ITS A BLANK LINE
 				for (int j = 0; j < 29; j++) {
-					int shouldSpawn = rndSpawner.nextInt(3);
-					if(shouldSpawn > 0){
+					int shouldSpawn = rndSpawner.nextInt(10);
+					if(shouldSpawn > 0 && shouldSpawn < 6){
 						brickPositions[i][j] = 1;
 					}
 				}
@@ -57,8 +58,8 @@ final class Init {
 			else{
 				//IF ITS A LINE WITH WALLS
 				for (int j = 0; j < 29; j+=2) {
-					int shouldSpawn = rndSpawner.nextInt(3);
-					if(shouldSpawn > 0){
+					int shouldSpawn = rndSpawner.nextInt(10);
+					if(shouldSpawn > 0 && shouldSpawn < 6){
 						brickPositions[i][j] = 1;
 					}
 				}
@@ -89,6 +90,42 @@ final class Init {
 		}
 		
 		return wallPositions;
+	}
+
+	public static ArrayList<Enemy> enemyInit(ArrayList<Enemy> enemies, Integer[][] brickPositions){
+		
+		Random rndSpawner = new Random();
+		
+		for (int i = 0; i < 13; i++) {
+			if(i % 2 == 0){
+				for (int j = 2; j < 29; j++) {
+					if(brickPositions[i][j] != 1){
+						int shouldSpawn = rndSpawner.nextInt(5);
+						if(shouldSpawn == 0){
+							enemies.add(new Enemy(((j * 40) + 100), (i * 40) + 80));
+						}
+					}
+				}
+			}
+			else{
+				for (int j = 2; j < 29; j+=2) {
+					if(brickPositions[i][j] != 1){
+						int shouldSpawn = rndSpawner.nextInt(5);
+						if(shouldSpawn == 0){
+							enemies.add(new Enemy(((j * 40) + 100), (i * 40) + 80));
+						}
+					}
+				}
+			}
+		}
+		
+		for (int i = 0; i < enemies.size(); i++) {
+			if(enemies.get(i).getX() < 500 && enemies.get(i).getY() > 300){
+				enemies.remove(enemies.get(i));
+			}
+		}
+		
+		return enemies;
 	}
 }
 

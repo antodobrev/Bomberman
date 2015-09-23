@@ -36,13 +36,13 @@ public class Engine extends ApplicationAdapter {
 	private float elapsedTime = 0;
 	
 	//BOMB ELEMENTS
-	private List<Bomb> bombs;
+	private ArrayList<Bomb> bombs;
 	private int maxBombs = 1;
 	private float putBombInterval = 1f;
 	private float lastBombInitialized;
 	
 	//ENEMY DATA
-	private Enemy enemy;
+	private ArrayList<Enemy> enemies;
 	
 	@Override
 	public void create () {
@@ -53,20 +53,26 @@ public class Engine extends ApplicationAdapter {
 		font = new BitmapFont();
 		
 		hero = new Player("images/character_walk_sheets/walk_", 100, 555);
-		bombs = new ArrayList<>();
-		enemy = new Enemy(100, 560);
+		bombs = new ArrayList<Bomb>();
+		enemies = new ArrayList<Enemy>();
 		
 		
 		brickPositions = new Integer[13][29];
 		Init.brickInit(brickPositions);
 		walls = new ArrayList<Wall>();
 		walls = Init.wallInit(walls);
+		enemies = Init.enemyInit(enemies, brickPositions);
 	}
 
 	public void update(){
+		CollisionHandler.returnInBox(hero);
 		this.handleUserInput();
 		this.hero.update();
-		this.enemy.update(walls, brickPositions);
+		
+		for(Enemy e : enemies){
+			e.update(walls, brickPositions, bombs);
+		}
+		
 	}
 	
 	@Override
@@ -87,12 +93,12 @@ public class Engine extends ApplicationAdapter {
 			batch.draw(hero.getPlayerTexture(), hero.getX(), hero.getY());
 		}
 		
-		batch.draw(enemy.getAnimation().getKeyFrame(elapsedTime, true), enemy.getX(), enemy.getY());
+		Renderer.enemyRender(batch, elapsedTime, enemies);
 		
 		for (Bomb bomb : bombs) {
 			bomb.update(elapsedTime, batch);
 			if(bomb.hasExploded()){
-				bomb.explode(brickPositions);
+				bomb.explode(brickPositions, enemies);
 			}
 		}
 		
@@ -104,10 +110,8 @@ public class Engine extends ApplicationAdapter {
 		
 		String coordinateX = String.format("Player X - %.1f", hero.getX());
 		String coordinateY = String.format("Player Y - %.1f", hero.getY());
-		String enemyDirection = String.format("Enemy dir - %s", enemy.getDirection());
 		font.draw(batch, coordinateX, 100, 700);
 		font.draw(batch, coordinateY, 100, 680);
-		font.draw(batch, enemyDirection, 100, 660);
 		batch.end();
 	}
 
@@ -115,28 +119,28 @@ public class Engine extends ApplicationAdapter {
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			hero.setDirection("left");
-			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
+			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions, bombs)){
 				hero.moveLeft();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			hero.setDirection("right");
-			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
+			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions, bombs)){
 				hero.moveRight();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 			hero.setDirection("down");
-			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
+			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions, bombs)){
 				hero.moveDown();
 			}
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			hero.setDirection("up");
-			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions)){
+			if(CollisionHandler.checkInTheBox(hero) && CollisionHandler.checkCollision(hero, walls, brickPositions, bombs)){
 				hero.moveUp();
 			}
 		}

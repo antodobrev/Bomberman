@@ -2,7 +2,9 @@ package com.bomberman.core;
 
 import java.util.ArrayList;
 
+import com.bomberman.objects.Bomb;
 import com.bomberman.objects.Character;
+import com.bomberman.objects.Player;
 import com.bomberman.objects.Wall;
 
 public final class CollisionHandler {
@@ -10,38 +12,53 @@ public final class CollisionHandler {
 	private CollisionHandler(){
 	}
 	
+	public static void returnInBox(Character character){
+		if(character.getX() < 100){
+			character.setX(100);
+		}
+		if(character.getX() > 1260){
+			character.setX(1222);
+		}
+		if(character.getY() < 80){
+			character.setY(80);
+		}
+		if(character.getY() > 555){
+			character.setY(555);
+		}
+	}
+	
 	public static boolean checkInTheBox(Character character){
 		switch(character.getDirection()){
 		case "left":
 			if(character.getX() - character.STEP_IN_PIXELS < 98){
-			return false;
+				return false;
 			}
 			break;
 		
 		case "right":
 			if(character.getX() + 38 + character.STEP_IN_PIXELS > 1260){
-			return false;
+				return false;
 			}
 			break;
 		
 		case "down":
 			if(character.getY() - character.STEP_IN_PIXELS < 75){
-			return false;
+				return false;
 			}
 			break;
 		
 		case "up":
 			if(character.getY() + 38 + character.STEP_IN_PIXELS > 600){
-			return false;
+				return false;
 			}
 			break;
 		}
 		return true;
 	}
 	
-	public static boolean checkCollision(Character character, ArrayList<Wall> walls, Integer[][] brickPositions){
+	public static boolean checkCollision(Character character, ArrayList<Wall> walls, Integer[][] brickPositions, ArrayList<Bomb> bombs){
 
-		if(!wallCheck(character, walls) || !brickCheck(character, brickPositions)){
+		if(!wallCheck(character, walls) || !brickCheck(character, brickPositions) || !bombCheck(character, bombs)){
 			return false;
 		}
 		
@@ -106,6 +123,58 @@ public final class CollisionHandler {
 						break;
 					}
 				}
+			}
+		}
+		
+		return true;
+	}
+	
+	public static boolean bombCheck(Character character, ArrayList<Bomb> bombs){
+		
+		for (int i = 0; i < bombs.size(); i++) {
+			Bomb currentBomb = bombs.get(i);
+			Wall currentWall = new Wall(currentBomb.getBombX() - 10, currentBomb.getBombY() - 10);
+			switch(character.getDirection()){
+			case "left":
+				if(!checkLeft(character, currentWall)){
+					if(character.getClass().equals(Player.class)){
+						float x = (int)(currentBomb.getBombX() - 100) / 40;
+						x = ((x + 1) * 40) + 100;
+						character.setX(x);
+					}
+					return false;
+				}
+				break;
+			case "right":
+				if(!checkRight(character, currentWall)){
+					if(character.getClass().equals(Player.class)){
+						float x = (int)(currentBomb.getBombX() - 100) / 40;
+						x = ((x - 1) * 40) + 100;
+						character.setX(x);
+					}
+					return false;
+				}
+				break;
+			case "up":
+				if(!checkTop(character, currentWall)){
+					if(character.getClass().equals(Player.class)){
+						float y = (int)(currentBomb.getBombY() - 80) / 40;
+						y = ((y - 1) * 40) + 80;
+						character.setY(y);
+					}
+					return false;
+				}
+				break;
+			case "down":
+				if(!checkBottom(character, currentWall)){
+					if(character.getClass().equals(Player.class)){
+						float y = (int)(currentBomb.getBombY() - 80) / 40;
+						y = ((y + 1) * 40) + 80;
+						character.setY(y);
+					}
+					return false;
+				}
+				break;
 			}
 		}
 		
